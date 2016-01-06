@@ -7,7 +7,7 @@ package main
 import (
 	"fmt"
 	fct "github.com/FactomProject/factoid"
-	"github.com/FactomProject/fctwallet/handlers"
+	"github.com/FactomProject/fctwallet2/handlers"
 	"github.com/hoisie/web"
 	"time"
 )

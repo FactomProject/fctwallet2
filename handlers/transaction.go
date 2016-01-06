@@ -18,8 +18,8 @@ import (
 	"github.com/FactomProject/factoid/wallet"
 	"github.com/hoisie/web"
 
-	"github.com/FactomProject/fctwallet/Wallet"
-	"github.com/FactomProject/fctwallet/Wallet/Utility"
+	"github.com/FactomProject/fctwallet2/Wallet"
+	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 )
 
 /******************************************

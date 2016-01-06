@@ -6,8 +6,8 @@ package handlers
 
 import (
 	fct "github.com/FactomProject/factoid"
-	"github.com/FactomProject/fctwallet/Wallet"
-	"github.com/FactomProject/fctwallet/Wallet/Utility"
+	"github.com/FactomProject/fctwallet2/Wallet"
+	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 	"github.com/hoisie/web"
 )
 

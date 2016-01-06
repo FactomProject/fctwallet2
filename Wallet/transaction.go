@@ -15,7 +15,7 @@ import (
 	"github.com/FactomProject/FactomCode/common"
 	fct "github.com/FactomProject/factoid"
 	"github.com/FactomProject/factoid/wallet"
-	"github.com/FactomProject/fctwallet/Wallet/Utility"
+	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 )
 
 // New Transaction:  key --

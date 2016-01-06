@@ -11,7 +11,7 @@ import (
 	"github.com/hoisie/web"
 	"github.com/FactomProject/factom"
 	"github.com/FactomProject/factoid/block"
-	"github.com/FactomProject/fctwallet/Wallet"
+	"github.com/FactomProject/fctwallet2/Wallet"
 	"github.com/FactomProject/FactomCode/common"
 )
 

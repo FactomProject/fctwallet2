@@ -10,7 +10,7 @@ import (
 	"fmt"
 	fct "github.com/FactomProject/factoid"
 	"github.com/FactomProject/factoid/wallet"
-	"github.com/FactomProject/fctwallet/Wallet/Utility"
+	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 	"io/ioutil"
 	"net/http"
 	"strconv"

@@ -153,6 +153,9 @@ func Start() {
 }
 
 func main() {
+	fmt.Println("+=============================+")
+	fmt.Println("|  fctwallet for milestone 2  |")
+	fmt.Println("+=============================+")
 	Start()
 	for {
 		time.Sleep(time.Second)

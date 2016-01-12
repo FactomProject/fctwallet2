@@ -154,7 +154,7 @@ func Start() {
 
 func main() {
 	fmt.Println("+====================+")
-	fmt.Println("|  fctwallet for v2  |")
+	fmt.Println("|  fctwallet for m2  |")
 	fmt.Println("+====================+")
 	Start()
 	for {

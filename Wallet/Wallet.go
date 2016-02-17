@@ -2,9 +2,9 @@ package Wallet
 
 import (
 	"fmt"
-	"regexp"
-	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 	fct "github.com/FactomProject/factoid"
+	"github.com/FactomProject/fctwallet2/Wallet/Utility"
+	"regexp"
 )
 
 /******************************************

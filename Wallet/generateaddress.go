@@ -173,4 +173,3 @@ func GenerateECAddressStringFromHumanReadablePrivateKey(name string, privateKey 
 	}
 	return factoid.ConvertECAddressToUserStr(addr), nil
 }
-

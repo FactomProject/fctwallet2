@@ -132,7 +132,7 @@ func Start() {
 	// localhost:8089/v1/factoid-get-fee/
 	// Get the Transaction fee
 	server.Get("/v1/properties/", handlers.HandleProperties)
-	
+
 	// Get Address List
 	// localhost:8089/v1/factoid-get-addresses/
 	server.Get("/v1/factoid-get-addresses/", handlers.HandleGetAddresses)
@@ -148,7 +148,7 @@ func Start() {
 	// Get processed transactions
 	// localhost:8089/v1/factoid-get-addresses/
 	server.Post("/v1/factoid-get-processed-transactionsj/(.*)", handlers.HandleGetProcessedTransactionsj)
-	
+
 	go server.Run(fmt.Sprintf("%s:%d", handlers.IpAddress, handlers.PortNumber))
 }
 

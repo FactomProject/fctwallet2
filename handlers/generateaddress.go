@@ -155,4 +155,3 @@ func HandleFactoidGenerateAddressFromMnemonic(ctx *web.Context, params string) {
 
 	reportResults(ctx, adrstr, true)
 }
-

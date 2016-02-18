@@ -11,7 +11,7 @@ import (
 	"github.com/FactomProject/factom"
 	"github.com/FactomProject/factomd/common/constants"
 	"github.com/FactomProject/factomd/common/interfaces"
-	"github.com/FactomProject/fctwallet/scwallet"
+	"github.com/FactomProject/fctwallet2/scwallet"
 )
 
 func ComposeChainSubmit(name string, data []byte) ([]byte, error) {

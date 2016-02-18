@@ -9,7 +9,7 @@ import (
 	"github.com/hoisie/web"
 	"time"
 
-	"github.com/FactomProject/fctwallet/handlers"
+	"github.com/FactomProject/fctwallet2/handlers"
 )
 
 var server = web.NewServer()

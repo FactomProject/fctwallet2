@@ -6,7 +6,7 @@ package Wallet
 
 import (
 	"github.com/FactomProject/factomd/util"
-	"github.com/FactomProject/fctwallet/scwallet"
+	"github.com/FactomProject/fctwallet2/scwallet"
 )
 
 var (

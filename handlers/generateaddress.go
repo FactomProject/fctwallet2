@@ -7,8 +7,8 @@ package handlers
 import (
 	"github.com/hoisie/web"
 
-	"github.com/FactomProject/fctwallet/Wallet"
-	"github.com/FactomProject/fctwallet/Wallet/Utility"
+	"github.com/FactomProject/fctwallet2/Wallet"
+	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 )
 
 func HandleFactoidGenerateAddress(ctx *web.Context, name string) {

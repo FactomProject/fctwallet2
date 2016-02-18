@@ -16,8 +16,8 @@ import (
 	"github.com/FactomProject/factomd/common/factoid"
 	"github.com/FactomProject/factomd/common/interfaces"
 	"github.com/FactomProject/factomd/common/primitives"
-	"github.com/FactomProject/fctwallet/Wallet/Utility"
-	"github.com/FactomProject/fctwallet/scwallet"
+	"github.com/FactomProject/fctwallet2/Wallet/Utility"
+	"github.com/FactomProject/fctwallet2/scwallet"
 )
 
 // New Transaction:  key --

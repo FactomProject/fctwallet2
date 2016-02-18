@@ -9,7 +9,7 @@ import (
 	"github.com/hoisie/web"
 	"io/ioutil"
 
-	"github.com/FactomProject/fctwallet/Wallet"
+	"github.com/FactomProject/fctwallet2/Wallet"
 )
 
 func HandleCommitChain(ctx *web.Context, name string) {

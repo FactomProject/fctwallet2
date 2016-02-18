@@ -2,7 +2,7 @@ package Utility_test
 
 import (
 	//"fmt"
-	"github.com/FactomProject/fctwallet/Wallet/Utility"
+	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 	"testing"
 )
 

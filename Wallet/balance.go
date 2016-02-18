@@ -8,13 +8,14 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	fct "github.com/FactomProject/factoid"
-	"github.com/FactomProject/factoid/wallet"
-	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 	"strings"
+
+	fct "github.com/FactomProject/factoid"
+	"github.com/FactomProject/factoid/wallet"
+	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 )
 
 func LookupAddress(adrType string, adr string) (string, error) {
@@ -30,7 +31,7 @@ func LookupAddress(adrType string, adr string) (string, error) {
 			we2 := we.(wallet.IWalletEntry)
 
 			if we2.GetType() == "ec" {
-				if strings.ToLower(adrType) == "fct" {
+				if strings.ToLower(adrType) == "fa" {
 					return "", fmt.Errorf("%s is an entry credit address, not a factoid address.", adr)
 				}
 			} else if we2.GetType() == "fct" {
@@ -58,7 +59,7 @@ func FactoidBalance(adr string) (int64, error) {
 		return 0, err
 	}
 
-	str := fmt.Sprintf("http://%s/v1/factoid-balance/%s", ipaddressFD+portNumberFD, adr)
+	str := fmt.Sprintf("http://%s:%d/v1/factoid-balance/%s", ipaddressFD, portNumberFD, adr)
 	resp, err := http.Get(str)
 	if err != nil {
 		return 0, err
@@ -94,7 +95,7 @@ func ECBalance(adr string) (int64, error) {
 		return 0, err
 	}
 
-	str := fmt.Sprintf("http://%s/v1/entry-credit-balance/%s", ipaddressFD+portNumberFD, adr)
+	str := fmt.Sprintf("http://%s:%d/v1/entry-credit-balance/%s", ipaddressFD, portNumberFD, adr)
 	resp, err := http.Get(str)
 	if err != nil {
 		return 0, err

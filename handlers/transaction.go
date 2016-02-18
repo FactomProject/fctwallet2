@@ -11,13 +11,14 @@ import (
 	"fmt"
 	"regexp"
 	"strconv"
+	//"time"
 	"strings"
-	"time"
 
 	fct "github.com/FactomProject/factoid"
 	"github.com/FactomProject/factoid/wallet"
 	"github.com/hoisie/web"
 
+	"github.com/FactomProject/FactomCode/common"
 	"github.com/FactomProject/fctwallet2/Wallet"
 	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 )
@@ -47,7 +48,7 @@ func ValidateKey(key string) (msg string, valid bool) {
 	return "", true
 }
 
-// True is sccuess! False is failure.  The Response is what the CLI
+// True is success! False is failure.  The Response is what the CLI
 // should report.
 func reportResults(ctx *web.Context, response string, success bool) {
 	b := Response{
@@ -59,6 +60,7 @@ func reportResults(ctx *web.Context, response string, success bool) {
 		ctx.WriteHeader(httpBad)
 		return
 	} else {
+		ctx.ContentType("json")
 		ctx.Write(p)
 	}
 }
@@ -251,6 +253,7 @@ func HandleGetProcessedTransactionsj(ctx *web.Context, parms string) {
 // Setup must be called once before you do anything else with the wallet.
 //
 
+/*
 func HandleFactoidSetup(ctx *web.Context, seed string) {
 	// Make sure we have a seed.
 	if len(seed) == 0 {
@@ -285,6 +288,7 @@ func HandleFactoidSetup(ctx *web.Context, seed string) {
 		reportResults(ctx, "New seed set, no fountain addresses defined", true)
 	}
 }
+*/
 
 // New Transaction:  key --
 // We create a new transaction, and track it with the user supplied key.  The
@@ -336,29 +340,15 @@ func HandleFactoidDeleteTransaction(ctx *web.Context, key string) {
 }
 
 func HandleProperties(ctx *web.Context) {
-	prop, err := Wallet.GetProperties()
+	p, f, w, err := Wallet.GetProperties()
 	if err != nil {
 		reportResults(ctx, "Failed to retrieve properties", false)
 		return
 	}
 
-	top := prop.Protocol_Version / 1000000
-	mid := (prop.Protocol_Version % 1000000) / 1000
-	low := prop.Protocol_Version % 1000
-
-	ret := fmt.Sprintf("Protocol Version:   %d.%d.%d\n", top, mid, low)
-
-	top = prop.Factomd_Version / 1000000
-	mid = (prop.Factomd_Version % 1000000) / 1000
-	low = prop.Factomd_Version % 1000
-
-	ret = ret + fmt.Sprintf("factomd Version:    %d.%d.%d\n", top, mid, low)
-
-	top = prop.Fctwallet_Version / 1000000
-	mid = (prop.Fctwallet_Version % 1000000) / 1000
-	low = prop.Fctwallet_Version % 1000
-
-	ret = ret + fmt.Sprintf("fctwallet Version:  %d.%d.%d\n", top, mid, low)
+	ret := fmt.Sprintf("Protocol Version:   %s\n", p)
+	ret = ret + fmt.Sprintf("factomd Version:    %s\n", f)
+	ret = ret + fmt.Sprintf("fctwallet Version:  %s\n", w)
 
 	reportResults(ctx, ret, true)
 
@@ -571,10 +561,18 @@ func GetAddresses() []byte {
 	return out.Bytes()
 }
 
+// Specifying a fee overrides either not being connected, or the current fee.
+// Params:
+//   key (limit printout to this key)
+//   fee (specify the transation fee)
 func GetTransactions(ctx *web.Context) ([]byte, error) {
-	exch, err := GetFee(ctx)
+	connected := true
+
+	var _ = connected
+
+	exch, err := GetFee(ctx) // The Fee will be zero if we have no connection.
 	if err != nil {
-		return nil, err
+		connected = false
 	}
 
 	keys, transactions, err := Wallet.GetTransactions()
@@ -584,6 +582,7 @@ func GetTransactions(ctx *web.Context) ([]byte, error) {
 
 	var out bytes.Buffer
 	for i, trans := range transactions {
+
 		fee, _ := trans.CalculateFee(uint64(exch))
 		cprt := ""
 		cin, err := trans.TotalInputs()
@@ -614,8 +613,8 @@ func GetTransactions(ctx *web.Context) ([]byte, error) {
 			}
 		}
 
-		out.WriteString(fmt.Sprintf("\n%25s:  Fee Due: %s  %s\n\n%s\n",
-			keys[i],
+		out.WriteString(fmt.Sprintf("%s:  Fee Due: %s  %s\n\n%s\n",
+			strings.TrimSpace(strings.TrimRight(string(keys[i]), "\u0000")),
 			strings.TrimSpace(fct.ConvertDecimal(fee)),
 			cprt,
 			transactions[i].String()))
@@ -645,9 +644,53 @@ func GetTransactions(ctx *web.Context) ([]byte, error) {
 	return output, nil
 }
 
+// Specifying a fee overrides either not being connected, or the current fee.
+// Params:
+//   key (limit printout to this key)
+//   fee (specify the transation fee)
+func GetTransactionsj(ctx *web.Context) (string, error) {
+	connected := true
+
+	var _ = connected
+
+	keys, transactions, _ := Wallet.GetTransactions()
+	type pair struct {
+		Key     string
+		TransID string
+	}
+	var trans []*pair
+	for i, t := range transactions {
+		p := new(pair)
+		p.Key = strings.TrimRight(string(keys[i]), "\u0000")
+		p.TransID = t.GetSigHash().String()
+		trans = append(trans, p)
+	}
+
+	return common.EncodeJSONString(trans)
+
+}
+
 func HandleGetAddresses(ctx *web.Context) {
 	b := new(Response)
 	b.Response = string(GetAddresses())
+	b.Success = true
+	j, err := json.Marshal(b)
+	if err != nil {
+		reportResults(ctx, err.Error(), false)
+		return
+	}
+	ctx.ContentType("json")
+	ctx.Write(j)
+}
+
+func HandleGetTransactionsj(ctx *web.Context) {
+	b := new(Response)
+	txt, err := GetTransactionsj(ctx)
+	if err != nil {
+		reportResults(ctx, err.Error(), false)
+		return
+	}
+	b.Response = txt
 	b.Success = true
 	j, err := json.Marshal(b)
 	if err != nil {
@@ -671,6 +714,7 @@ func HandleGetTransactions(ctx *web.Context) {
 		reportResults(ctx, err.Error(), false)
 		return
 	}
+	ctx.ContentType("json")
 	ctx.Write(j)
 }
 

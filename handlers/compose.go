@@ -6,10 +6,10 @@ package handlers
 
 import (
 	"fmt"
+	"github.com/hoisie/web"
 	"io/ioutil"
 
-	"github.com/FactomProject/fctwallet2/Wallet"
-	"github.com/hoisie/web"
+	"github.com/FactomProject/fctwallet/Wallet"
 )
 
 func HandleComposeEntrySubmit(ctx *web.Context, name string) {

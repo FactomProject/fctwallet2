@@ -5,13 +5,11 @@
 package handlers
 
 import (
-	fct "github.com/FactomProject/factoid"
-	"github.com/FactomProject/fctwallet2/Wallet"
-	"github.com/FactomProject/fctwallet2/Wallet/Utility"
 	"github.com/hoisie/web"
-)
 
-var _ = fct.Address{}
+	"github.com/FactomProject/fctwallet/Wallet"
+	"github.com/FactomProject/fctwallet/Wallet/Utility"
+)
 
 func HandleFactoidGenerateAddress(ctx *web.Context, name string) {
 	if Utility.IsValidKey(name) == false {

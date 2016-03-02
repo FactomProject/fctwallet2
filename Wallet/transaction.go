@@ -239,17 +239,20 @@ func FactoidSubmit(jsonkey string) (string, error) {
 
 	err = wallet.ValidateSignatures(trans)
 	if err != nil {
+		fmt.Println(err)
 		return "", err
 	}
 
 	err = isReasonableFee(trans)
 	if err != nil {
+		fmt.Println(err)
 		return "", err
 	}
 
 	// Okay, transaction is good, so marshal and send to factomd!
 	data, err := trans.MarshalBinary()
 	if err != nil {
+		fmt.Println(err)
 		return "", err
 	}
 
@@ -259,6 +262,7 @@ func FactoidSubmit(jsonkey string) (string, error) {
 
 	j, err := json.Marshal(s)
 	if err != nil {
+		fmt.Println(err)
 		return "", err
 	}
 

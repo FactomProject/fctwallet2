@@ -12,7 +12,7 @@ import (
 	"regexp"
 	"strconv"
 	//"time"
-	"github.com/hoisie/web"
+	"github.com/FactomProject/web"
 	"strings"
 
 	"github.com/FactomProject/factomd/common/constants"
@@ -130,8 +130,8 @@ func getParams_(ctx *web.Context, params string, ec bool) (
 			return
 		}
 		if we != nil {
-			address, err = we.(interfaces.IWalletEntry).GetAddress()
-			if we.(interfaces.IWalletEntry).GetType() == "ec" {
+			address, err = we.GetAddress()
+			if we.GetType() == "ec" {
 				if !ec {
 					reportResults(ctx, "Was Expecting a Factoid Address", false)
 					ok = false
@@ -359,41 +359,44 @@ func HandleProperties(ctx *web.Context) {
 
 }
 
-func HandleFactoidAddFee(ctx *web.Context, parms string) {
-	trans, key, _, address, _, ok := getParams_(ctx, parms, false)
+func HandleFactoidAddFee(ctx *web.Context, params string) {
+	trans, key, _, address, _, ok := getParams_(ctx, params, false)
 	if !ok {
+		fmt.Println("Not OK")
 		return
 	}
 
 	name := ctx.Params["name"] // This is the name the user used.
 
-	{
-		ins, err := trans.TotalInputs()
-		if err != nil {
-			reportResults(ctx, err.Error(), false)
-			return
-		}
-		outs, err := trans.TotalOutputs()
-		if err != nil {
-			reportResults(ctx, err.Error(), false)
-			return
-		}
-		ecs, err := trans.TotalECs()
-		if err != nil {
-			reportResults(ctx, err.Error(), false)
-			return
-		}
+	ins, err := trans.TotalInputs()
+	if err != nil {
+		fmt.Println(err.Error())
+		reportResults(ctx, err.Error(), false)
+		return
+	}
+	outs, err := trans.TotalOutputs()
+	if err != nil {
+		fmt.Println(err.Error())
+		reportResults(ctx, err.Error(), false)
+		return
+	}
+	ecs, err := trans.TotalECs()
+	if err != nil {
+		fmt.Println(err.Error())
+		reportResults(ctx, err.Error(), false)
+		return
+	}
 
-		if ins != outs+ecs {
-			msg := fmt.Sprintf(
-				"Addfee requires that all the inputs balance the outputs.\n"+
-					"The total inputs of your transaction are              %s\n"+
-					"The total outputs + ecoutputs of your transaction are %s",
-				primitives.ConvertDecimalToPaddedString(ins), primitives.ConvertDecimalToPaddedString(outs+ecs))
+	if ins != outs+ecs {
+		msg := fmt.Sprintf(
+			"Addfee requires that all the inputs balance the outputs.\n"+
+				"The total inputs of your transaction are              %s\n"+
+				"The total outputs + ecoutputs of your transaction are %s",
+			primitives.ConvertDecimalToPaddedString(ins), primitives.ConvertDecimalToPaddedString(outs+ecs))
 
-			reportResults(ctx, msg, false)
-			return
-		}
+		fmt.Println(msg)
+		reportResults(ctx, msg, false)
+		return
 	}
 
 	transfee, err := Wallet.FactoidAddFee(trans, key, address, name)
@@ -508,7 +511,10 @@ func HandleGetFee(ctx *web.Context, k string) {
 }
 
 func GetAddresses() []byte {
-	values := Wallet.GetAddresses()
+	values, err := Wallet.GetAddresses()
+	if err != nil {
+		panic(err)
+	}
 
 	ecKeys := make([]string, 0, len(values))
 	fctKeys := make([]string, 0, len(values))

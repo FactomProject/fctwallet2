@@ -5,11 +5,33 @@
 package handlers
 
 import (
-	"github.com/FactomProject/web"
-
+	"github.com/FactomProject/factomd/common/primitives"
+	"github.com/FactomProject/factomd/wsapi"
 	"github.com/FactomProject/fctwallet2/Wallet"
 	"github.com/FactomProject/fctwallet2/Wallet/Utility"
+	"github.com/FactomProject/web"
 )
+
+func HandleV2FactoidGenerateAddress(params interface{}) (interface{}, *primitives.JSONError) {
+	name, ok := params.(string)
+	if ok == false {
+		return nil, wsapi.NewInvalidParamsError()
+	}
+
+	if Utility.IsValidKey(name) == false {
+		return nil, NewInvalidNameError()
+	}
+
+	adrstr, err := Wallet.GenerateAddressString(name)
+	if err != nil {
+		return nil, wsapi.NewCustomInternalError(err.Error())
+	}
+
+	resp := new(GenerateAddressResponse)
+	resp.Address = adrstr
+
+	return resp, nil
+}
 
 func HandleFactoidGenerateAddress(ctx *web.Context, name string) {
 	if Utility.IsValidKey(name) == false {
@@ -155,15 +177,29 @@ func HandleFactoidGenerateAddressFromMnemonic(ctx *web.Context, params string) {
 }
 
 /*********************************************************************************************************/
-/*********************************************check address type******************************************/
-/*********************************************************************************************************/
+/*********************************************Check address type******************************************/
 /*********************************************************************************************************/
 func HandleVerifyAddressType(ctx *web.Context, params string) {
-
 	address := ctx.Params["address"]
+
+	answer, err := HandleV2VerifyAddressType(address)
+	if err != nil {
+		reportResults(ctx, err.Error(), false)
+	}
+
+	reportResults(ctx, answer.(*VerifyAddressTypeResponse).Type, answer.(*VerifyAddressTypeResponse).Valid)
+}
+
+func HandleV2VerifyAddressType(params interface{}) (interface{}, *primitives.JSONError) {
+	address, ok := params.(string)
+	if ok == false {
+		return nil, wsapi.NewInvalidParamsError()
+	}
 
 	resp, pass := Wallet.VerifyAddressType(address)
 
-	reportResults(ctx, resp, pass)
-	return
+	answer := new(VerifyAddressTypeResponse)
+	answer.Type = resp
+	answer.Valid = pass
+	return answer, nil
 }

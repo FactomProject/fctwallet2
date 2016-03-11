@@ -183,12 +183,10 @@ func (w WalletEntry) MarshalBinary() ([]byte, error) {
 		return nil, err
 	}
 	out.Write(data)
-	
 	out.WriteByte(byte(len(w.public)))
 	for _, public := range w.public {
 		out.Write(public)
 	}
-	
 	out.WriteByte(byte(len(w.private)))
 	for _, private := range w.private {
 		out.Write(private)
